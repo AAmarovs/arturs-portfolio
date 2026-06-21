@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import './App.css'
 
 const tabs = ['webflow', 'react', 'ichgram', 'html', 'zeromoney']
@@ -295,12 +296,16 @@ function wrapIndex(index, length) {
   return ((index % length) + length) % length
 }
 
+const portfolioAssets = Object.values(projectMedia).flat()
+const preloadAssets = Array.from(new Map(portfolioAssets.map((item) => [item.src, item])).values())
+
 function App() {
   const [language, setLanguage] = useState('en')
   const [activeTab, setActiveTab] = useState('react')
   const [slideIndex, setSlideIndex] = useState(0)
   const [progress, setProgress] = useState(0)
   const [loaded, setLoaded] = useState(false)
+  const [assetUrls, setAssetUrls] = useState({})
   const [isPlaying, setIsPlaying] = useState(true)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
@@ -313,14 +318,54 @@ function App() {
       setProgress((current) => {
         if (current >= 100) {
           window.clearInterval(timer)
-          window.setTimeout(() => setLoaded(true), 180)
+          window.setTimeout(() => setLoaded(true), 220)
           return 100
         }
         return Math.min(current + 5, 100)
       })
-    }, 55)
+    }, 190)
 
     return () => window.clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    let isCancelled = false
+    const createdUrls = []
+
+    async function preloadPortfolioMedia() {
+      const loadedAssets = {}
+
+      await Promise.all(preloadAssets.map(async (asset) => {
+        try {
+          const response = await fetch(asset.src, { cache: 'force-cache' })
+          if (!response.ok) {
+            throw new Error(`Failed to preload ${asset.src}`)
+          }
+
+          const blob = await response.blob()
+          const objectUrl = URL.createObjectURL(blob)
+          createdUrls.push(objectUrl)
+          loadedAssets[asset.src] = objectUrl
+
+          if (!isCancelled) {
+            setAssetUrls((current) => ({ ...current, [asset.src]: objectUrl }))
+          }
+        } catch {
+          loadedAssets[asset.src] = asset.src
+        }
+      }))
+
+      if (!isCancelled) {
+        setAssetUrls((current) => ({ ...loadedAssets, ...current }))
+      }
+    }
+
+    preloadPortfolioMedia()
+
+    return () => {
+      isCancelled = true
+      createdUrls.forEach((url) => URL.revokeObjectURL(url))
+    }
   }, [])
 
   useEffect(() => {
@@ -338,6 +383,7 @@ function App() {
   const activeSlideIndex = wrapIndex(slideIndex, mediaItems.length)
   const currentMedia = mediaItems[activeSlideIndex]
   const isVideoSlide = currentMedia?.type === 'video'
+  const getAssetSrc = (src) => assetUrls[src] || src
 
   useEffect(() => {
     const video = videoRef.current
@@ -424,6 +470,7 @@ function App() {
 
   return (
     <>
+      <Analytics />
       {!loaded && (
         <div className="loading-screen" aria-live="polite">
           <div className="loading-content">
@@ -554,16 +601,16 @@ function App() {
                             <video
                               ref={isActive ? videoRef : null}
                               className="media-asset"
-                              src={item.src}
+                              src={getAssetSrc(item.src)}
                               autoPlay={isActive}
                               muted
                               loop
                               playsInline
-                              preload="metadata"
+                              preload="auto"
                             />
                           )}
                           {shouldLoadMedia && item.type === 'image' && (
-                            <img className="media-asset" src={item.src} alt={item.key} loading="lazy" decoding="async" />
+                            <img className="media-asset" src={getAssetSrc(item.src)} alt={item.key} loading="eager" decoding="async" />
                           )}
                           {shouldLoadMedia && item.type === 'placeholder' && (
                             <div className="media-placeholder-card">
