@@ -545,11 +545,12 @@ function App() {
                         : normalizedOffset === -1 || normalizedOffset === mediaItems.length - 1
                           ? 'is-prev'
                           : 'is-hidden'
+                    const shouldLoadMedia = positionClass !== 'is-hidden'
 
                     return (
                       <article key={item.key} className={`media-slide ${positionClass}`} aria-hidden={!isActive}>
                         <div className="media-slide-inner">
-                          {item.type === 'video' && (
+                          {shouldLoadMedia && item.type === 'video' && (
                             <video
                               ref={isActive ? videoRef : null}
                               className="media-asset"
@@ -558,10 +559,13 @@ function App() {
                               muted
                               loop
                               playsInline
+                              preload="metadata"
                             />
                           )}
-                          {item.type === 'image' && <img className="media-asset" src={item.src} alt={item.key} />}
-                          {item.type === 'placeholder' && (
+                          {shouldLoadMedia && item.type === 'image' && (
+                            <img className="media-asset" src={item.src} alt={item.key} loading="lazy" decoding="async" />
+                          )}
+                          {shouldLoadMedia && item.type === 'placeholder' && (
                             <div className="media-placeholder-card">
                               <span>{t.portfolio.empty}</span>
                             </div>
