@@ -239,7 +239,7 @@ const content = {
 
 const projectMedia = {
   webflow: [
-    { type: 'video', key: 'webflow-video', src: '/media/webflow/Webflow_landing.mp4' },
+    { type: 'video', key: 'webflow-video', src: '/media/webflow/Webflow_landing.mp4', poster: '/media/webflow/webflow-home-hero-about.png' },
     { type: 'image', key: 'webflow-home-hero-about', src: '/media/webflow/webflow-home-hero-about.png' },
     { type: 'image', key: 'webflow-about-problems', src: '/media/webflow/webflow-about-problems.png' },
     { type: 'image', key: 'webflow-about-story-problems', src: '/media/webflow/webflow-about-story-problems.png' },
@@ -250,7 +250,7 @@ const projectMedia = {
     { type: 'image', key: 'webflow-services-footer', src: '/media/webflow/webflow-services-footer.png' },
   ],
   react: [
-    { type: 'video', key: 'react-video', src: '/media/react/demo.mp4' },
+    { type: 'video', key: 'react-video', src: '/media/react/demo.mp4', poster: '/media/react/homepage-hero.png' },
     { type: 'image', key: 'react-home-hero', src: '/media/react/homepage-hero.png' },
     { type: 'image', key: 'react-home-discount', src: '/media/react/homepage-categories-discount.png' },
     { type: 'image', key: 'react-home-sale', src: '/media/react/homepage-sale.png' },
@@ -260,7 +260,7 @@ const projectMedia = {
     { type: 'image', key: 'react-cart', src: '/media/react/shopping-cart-page.png' },
   ],
   ichgram: [
-    { type: 'video', key: 'ichgram-video', src: '/media/ichgram/ichgram-demo.mp4' },
+    { type: 'video', key: 'ichgram-video', src: '/media/ichgram/ichgram-demo.mp4', poster: '/media/ichgram/ichgram-home-feed.png' },
     { type: 'image', key: 'ichgram-home-feed', src: '/media/ichgram/ichgram-home-feed.png' },
     { type: 'image', key: 'ichgram-search-panel', src: '/media/ichgram/ichgram-search-panel.png' },
     { type: 'image', key: 'ichgram-explore-grid', src: '/media/ichgram/ichgram-explore-grid.png' },
@@ -268,7 +268,7 @@ const projectMedia = {
     { type: 'image', key: 'ichgram-notifications-panel', src: '/media/ichgram/ichgram-notifications-panel.png' },
   ],
   html: [
-    { type: 'video', key: 'html-video', src: '/media/html/meetup-home.mp4' },
+    { type: 'video', key: 'html-video', src: '/media/html/meetup-home.mp4', poster: '/media/html/meetup-homepage-hero.png' },
     { type: 'image', key: 'html-home-hero', src: '/media/html/meetup-homepage-hero.png' },
     { type: 'image', key: 'html-home-events-near', src: '/media/html/meetup-homepage-events-near.png' },
     { type: 'image', key: 'html-home-categories', src: '/media/html/meetup-homepage-categories.png' },
@@ -277,7 +277,7 @@ const projectMedia = {
     { type: 'image', key: 'html-events-map', src: '/media/html/meetup-events-page-map.png' },
   ],
   zeromoney: [
-    { type: 'video', key: 'zeromoney-video', src: '/media/zeromoney/zeromoney-demo.mp4' },
+    { type: 'video', key: 'zeromoney-video', src: '/media/zeromoney/zeromoney-demo.mp4', poster: '/media/zeromoney/zeromoney-home-overview.png' },
     { type: 'image', key: 'zeromoney-home-overview', src: '/media/zeromoney/zeromoney-home-overview.png' },
     { type: 'image', key: 'zeromoney-march-detail', src: '/media/zeromoney/zeromoney-march-detail.png' },
     { type: 'image', key: 'zeromoney-graphs-overview', src: '/media/zeromoney/zeromoney-graphs-overview.png' },
@@ -297,7 +297,13 @@ function wrapIndex(index, length) {
 }
 
 const portfolioAssets = Object.values(projectMedia).flat()
-const preloadAssets = Array.from(new Map(portfolioAssets.map((item) => [item.src, item])).values())
+const preloadAssets = Array.from(
+  new Map(
+    portfolioAssets
+      .flatMap((item) => [item.src, item.poster].filter(Boolean))
+      .map((src) => [src, { src }]),
+  ).values(),
+)
 
 function App() {
   const [language, setLanguage] = useState('en')
@@ -602,6 +608,7 @@ function App() {
                               ref={isActive ? videoRef : null}
                               className="media-asset"
                               src={getAssetSrc(item.src)}
+                              poster={item.poster ? getAssetSrc(item.poster) : undefined}
                               autoPlay={isActive}
                               muted
                               loop
