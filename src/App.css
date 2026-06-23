@@ -388,6 +388,24 @@ main {
   background: rgba(255, 255, 255, 0.05);
 }
 
+.project-live-link {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 11px 17px;
+  border: 1px solid rgba(98, 229, 255, 0.35);
+  background: rgba(98, 229, 255, 0.08);
+  color: #e9fbff;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.project-live-link:hover {
+  transform: translateY(-1px);
+  border-color: rgba(236, 84, 205, 0.6);
+  background: rgba(236, 84, 205, 0.14);
+}
+
 .media-showcase-card {
   position: relative;
   display: grid;

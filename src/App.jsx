@@ -38,6 +38,8 @@ const content = {
           title: 'Webflow Landing Page Development',
           description: 'A freelance Webflow landing page project designed and built from scratch. My role covered the visual direction, layout composition, responsive structure, and final implementation in Webflow, with a focus on clean presentation, usability, and a polished client-ready result.',
           stack: 'Webflow, Responsive Design, Landing Page Architecture',
+          liveUrl: 'https://psihologicheskaya-praktika.webflow.io/',
+          liveLabel: 'Open live Webflow site',
         },
         react: {
           label: 'React.js',
@@ -76,8 +78,8 @@ const content = {
     },
     contact: {
       eyebrow: 'Contact',
-      title: 'I hope you enjoyed this portfolio and decide to work with me.',
-      text: 'The closing section is prepared for direct communication, networking links, and further collaboration after the portfolio review.',
+      title: 'If you liked this portfolio, feel free to get in touch.',
+      text: 'This portfolio is built as a professional presentation of my projects, interface approach, and implementation level. I am open to full-time roles, freelance work, and collaboration where strong UI, clean code, and finished results matter.',
       email: 'artur.amarov@gmail.com',
       phone: '+49 15205484812',
     },
@@ -114,6 +116,8 @@ const content = {
           title: 'Webflow Landing Page Development',
           description: 'Ein Freelance-Landingpage-Projekt in Webflow, das von Grund auf gestaltet und umgesetzt wurde. Meine Rolle umfasste die visuelle Richtung, die Layout-Komposition, die responsive Struktur und die finale Umsetzung in Webflow mit Fokus auf saubere Praesentation, Nutzbarkeit und ein kliententaugliches Ergebnis.',
           stack: 'Webflow, Responsive Design, Landing Page Architecture',
+          liveUrl: 'https://psihologicheskaya-praktika.webflow.io/',
+          liveLabel: 'Live Webflow Seite oeffnen',
         },
         react: {
           label: 'React.js',
@@ -152,8 +156,8 @@ const content = {
     },
     contact: {
       eyebrow: 'Kontakt',
-      title: 'Ich hoffe, dir hat dieses Portfolio gefallen und wir arbeiten bald zusammen.',
-      text: 'Der Abschlussbereich ist fuer direkte Kommunikation, Networking-Links und weitere Zusammenarbeit nach dem Portfolio-Review vorbereitet.',
+      title: 'Wenn Ihnen dieses Portfolio gefaellt, kontaktieren Sie mich gerne.',
+      text: 'Dieses Portfolio zeigt meine Projekte, meinen Ansatz fuer Interfaces und die Qualitaet der Umsetzung. Ich bin offen fuer Full-Time Positionen, Freelance-Aufgaben und Zusammenarbeit, bei der starke UI, sauberer Code und fertige Ergebnisse wichtig sind.',
       email: 'E-Mail',
       phone: 'Telefon',
     },
@@ -190,6 +194,8 @@ const content = {
           title: 'Webflow Landing Page Development',
           description: 'Фриланс-проект по разработке landing page на Webflow, который я спроектировал и собрал с нуля. Моя роль включала визуальное направление, композицию макета, адаптивную структуру и финальную реализацию в Webflow с фокусом на чистую подачу, удобство и клиентский уровень результата.',
           stack: 'Webflow, Responsive Design, Landing Page Architecture',
+          liveUrl: 'https://psihologicheskaya-praktika.webflow.io/',
+          liveLabel: 'Открыть Webflow-сайт',
         },
         react: {
           label: 'React.js',
@@ -228,7 +234,7 @@ const content = {
     },
     contact: {
       eyebrow: 'Контакты',
-      title: 'Надеюсь, вам понравилось это портфолио и вы решите сотрудничать со мной.',
+      title: 'Если вам понравилось это портфолио, обращайтесь.',
       text: 'Это портфолио собрано как профессиональная витрина моих проектов, подхода к интерфейсам и уровня реализации. Я открыт к full-time позициям, freelance-задачам и сотрудничеству, где важны сильный UI, аккуратный код и доведение продукта до рабочего результата.',
       email: 'artur.amarov@gmail.com',
       phone: '+49 15205484812',
@@ -577,6 +583,11 @@ function App() {
                 <h3>{activeProject.title}</h3>
                 <p>{activeProject.description}</p>
                 <div className="stack-pill">{activeProject.stack}</div>
+                {activeProject.liveUrl && (
+                  <a className="project-live-link" href={activeProject.liveUrl} target="_blank" rel="noreferrer">
+                    {activeProject.liveLabel}
+                  </a>
+                )}
               </article>
 
               <div className="media-showcase-card" ref={showcaseRef}>
